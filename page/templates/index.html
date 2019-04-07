@@ -1,43 +1,28 @@
-<!doctype html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html"; charset=utf-8">
-        <title>{{ category.name }}</title>
-    </head>
-    <body>
-        <h1>Список товаров</h1>
-        {% for cat in cats %}
-            {% if forloop.first %}
-                <h2><a href="/goods/">Категории:</a></h2>
-                <ul>
-            {% endif %}
-            <li><a href="/goods/{{ cat.id }}/">({{ forloop.counter }}) {{ cat.name }}</a></li>
-            {% if forloop.last %}
-                </ul>
-            {% endif %}
-        {% empty %}
-            <p>Список категорий пуст.</p>
-        {% endfor %}
-        {% if goods.count > 0 %}
-            <h2><a href="/goods/good/">Товары:</a></h2>
-            <table>
+{% extends "base.html" %}
+{% block title %}
+    {{ category.name }}
+{% endblock %}
+{% block main %}
+    <h2>{{ category.main }}</h2>
+    {% if goods.count > 0 %}
+        <h2><a href="{% url "goods" %}">Товары:</a></h2>
+        <table>
+            <tr>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Цена</th>
+                <th>Есть в наличии</th>
+            </tr>
+            {% for good in goods %}
                 <tr>
-                    <th>Название</th>
-                    <th>Описание</th>
-                    <th>Цена</th>
-                    <th>Есть в наличии</th>
+                    <td><a href="{% url "good" good_id=good.id %}">{{ good.name }}</a></td>
+                    <td>{{ good.description|linebreaksbr }}</td>
+                    <td>{{ good.price|floatformat:"2" }}</td>
+                    <td class="centered">{% if good.in_stock %}+{% endif %}</td>
                 </tr>
-                {% for good in goods %}
-                    <tr>
-                        <td><a href="/goods/good/{{ good.id }}/">{{ good.name }}</a></td>
-                        <td>{{ good.description|linebreaksbr }}</td>
-                        <td>{{ good.price|floatformat:"2" }}</td>
-                        <td>{% if good.in_stock %}+{% endif %}</td>
-                    </tr>
-                {% endfor %}
-            </table>
-        {% else %}
-            <p>Список товаров пуст.</p>
-        {% endif %}
-    </body>
-</html>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Список товаров пуст.</p>
+    {% endif %}
+{% endblock %}
