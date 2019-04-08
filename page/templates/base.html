@@ -16,7 +16,7 @@
                     <h2><a href="{% url "index" %}">Категории:</a></h2>
                     <ul>
                 {% endif %}
-                <li><a href="{% url "category" cat_id=cat.id %}">({{ forloop.counter }}) {{ cat.name }}</a></li>
+                <li><a href="{% url "index" cat_id=cat.id %}">({{ forloop.counter }}) {{ cat.name }}</a></li>
                 {% if forloop.last %}
                     </ul>
                 {% endif %}
