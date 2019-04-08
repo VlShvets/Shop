@@ -17,10 +17,10 @@ def index(request, cat_id):
     if cat_id == None:
         cat = Category.objects.first()
     else:
-        cat = Category.object.get(pk = cat_id)
-        
-    paginator = Paginator(Good.object.filter(category = cat).order_by("name"), 10)
+        cat = Category.objects.get(pk = cat_id)
     
+    paginator = Paginator(Good.objects.filter(category = cat).order_by("name"), 1)
+        
     try:
         goods = paginator.page(page_num)
     except InvalidPage:
@@ -41,4 +41,4 @@ def good(request, good_id):
     except Good.DoesNotExist:
         raise Http404;
 
-    return render(request, "good.html", { "cats": cats, "good": good, "pn": page_number})
+    return render(request, "good.html", { "cats": cats, "good": good, "pn": page_num})

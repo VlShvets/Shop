@@ -3,28 +3,24 @@
     {{ category.name }}
 {% endblock %}
 {% block main %}
-    <h2>{{ category.main }}</h2>
-    {% if goods.count > 0 %}
-        <h2><a href="{% url "good" %}">Товары:</a></h2>
-        <table>
+    <h2>{{ category.name }}</h2>
+    <h2><a href="{% url "good" %}">Товары:</a></h2>
+    <table>
+        <tr>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Цена</th>
+            <th>Есть в наличии</th>
+        </tr>
+        {% for good in goods %}
             <tr>
-                <th>Название</th>
-                <th>Описание</th>
-                <th>Цена</th>
-                <th>Есть в наличии</th>
+                <td><a href="{% url "good" good_id=good.id %}?page={{ goods.number }}">{{ good.name }}</a></td>
+                <td>{{ good.description|linebreaksbr }}</td>
+                <td>{{ good.price|floatformat:"2" }}</td>
+                <td class="centered">{% if good.in_stock %}+{% endif %}</td>
             </tr>
-            {% for good in goods %}
-                <tr>
-                    <td><a href="{% url "good" good_id=good.id %}?page={{ goods.number }}">{{ good.name }}</a></td>
-                    <td>{{ good.description|linebreaksbr }}</td>
-                    <td>{{ good.price|floatformat:"2" }}</td>
-                    <td class="centered">{% if good.in_stock %}+{% endif %}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>Список товаров пуст.</p>
-    {% endif %}
+        {% endfor %}
+    </table>
     {% if goods.paginator.num_pages > 1 %}
         <div id="pagination">
             {% if goods.has_previous %}
